@@ -1,38 +1,10 @@
-FROM 0x01be/swig:4.0 as swig
+FROM 0x01be/ops:build as build
 
-FROM alpine as build
+FROM alpine
 
-RUN apk add --no-cache --virtual ops-build-dependencies \
-    git \
-    build-base \
-    cmake \
-    coreutils \
-    bison \
-    flex \
-    tcsh \
-    tcl-dev \
-    tk-dev \
-    boost-dev &&\
-    apk add --no-cache --virtual ops-doc-dependencies \
-    doxygen \
-    graphviz
+RUN apk add --no-cache --virtual ops-runtime-dependencies \
+    tcl \
+    tk
 
-COPY --from=swig /opt/swig/ /opt/swig/
+COPY --from=build /opt/ops/ /opt/ops/
 
-ENV SWIG_DIR=/opt/swig \
-    SWIG_EXECUTABLE=/opt/swig/bin/swig \
-    PATH=${PATH}:/opt/swig/bin \
-    REVISION=master
-
-RUN git clone --recursive --branch ${REVISION} https://github.com/scale-lab/OpenPhySyn.git /ops
-
-WORKDIR /ops/build
-
-RUN cmake \
-    -DCMAKE_INSTALL_PREFIX=/opt/ops \
-    .. &&\
-    sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_RENAMED/g' /ops/external/OpenDB/src/db/dbAttrTable.h &&\
-    sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_RENAMED/g' /ops/external/OpenDB/src/db/dbPagedVector.h &&\
-    make &&\
-    make install
- 
