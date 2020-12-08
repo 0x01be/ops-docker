@@ -31,8 +31,8 @@ WORKDIR /ops/build
 RUN cmake \
     -DCMAKE_INSTALL_PREFIX=/opt/ops \
     .. &&\
-    sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_RENAMED/g' /ops/external/OpenDB/src/db/dbAttrTable.h &&\
-    sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_RENAMED/g' /ops/external/OpenDB/src/db/dbPagedVector.h &&\
+    sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENPHYSYN/g' /ops/external/OpenDB/src/db/dbAttrTable.h &&\
+    sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENPHYSYN/g' /ops/external/OpenDB/src/db/dbPagedVector.h &&\
     ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so &&\
     make &&\
     make install
