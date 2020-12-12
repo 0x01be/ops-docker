@@ -1,6 +1,6 @@
 FROM 0x01be/ops:build as build
 
-FROM alpine
+FROM 0x01be/base
 
 RUN apk add --no-cache --virtual ops-runtime-dependencies \
     tcl \
